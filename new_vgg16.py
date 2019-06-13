@@ -52,20 +52,35 @@ from keras.models import load_model
 # In[4]:
 
 train_data_dir = 'new_data_D'
-images = []
-for foldername in listdir(train_data_dir):
-    folderpath = os.path.join(train_data_dir, foldername)
-    label = foldername
-	
-    for img_path in glob(os.path.join(folderpath, '*jpg')):
-	img_data = image.imread(img_path , filename)
-	images.append(img_data)
-	
-len(images)
-'''
+train_files = []
+train_y = []
+files = glob.glob ("new_data_D/soil/*.jpg") # your image path
+for myFile in files:
+    train_files.append (myFile)
+    train_y.append('soil')
+files = glob.glob ("new_data_D/paddy/*.jpg") # your image path
+for myFile in files:
+    train_files.append (myFile)
+    train_y.append('paddy')
+
+print("Files in train_files: %d" % len(train_files))
+
+channels = 3
+#nb_classes = 2
+
+dataset = np.ndarray(shape=len(train_files), channels)
+
+# train and test split
+X_train, X_test, y_train, y_test = train_test_split(dataset, y_train, test_size=0.2, random_state=43)
+
+# validation and test split
+X_test, X_val, y_test, y_val = train_test_split(X_test, y_test, test_size=0.5, random_state=37)
+
+print("Train set size: {0}, Val set size: {1}, Test set size: {2}".format(len(X_train), len(X_val), len(X_test)))
+               
 #validation_data_dir = 'Deb_rice_soil/test'
-nb_train_samples = 2592
-nb_validation_samples = 400
+#nb_train_samples = 2592
+#nb_validation_samples = 400
 epochs = 30
 batch_size = 16
 img_width, img_height = 256, 256
